@@ -11,6 +11,8 @@ ApplicationWindow {
 
     title: qsTr("Motion Capture")
 
+    font.family: exo2.name
+
     FontLoader {
         id: exo2
         source: "qrc:/resources/fonts/Exo2.ttf"
@@ -61,6 +63,40 @@ ApplicationWindow {
                     Layout.alignment: Qt.AlignHCenter
                 }
             }
+
+            RowLayout {
+                spacing: 50
+                ColumnLayout {
+
+                }
+
+                ColumnLayout {
+                    spacing: 5
+
+                    Repeater {
+                        model: xsens.bodyMeasurements
+
+                        RowLayout {
+                            spacing: 10
+                            TextField {
+                                implicitHeight: 30
+                                font.pixelSize: 16
+                                validator: DoubleValidator{
+                                    bottom: 0
+                                }
+                            }
+                            Label {
+                                text: modelData.label
+                                font.pixelSize: 16
+
+                            }
+
+                        }
+                    }
+                }
+            }
+
+
         }
 
         ColumnLayout {

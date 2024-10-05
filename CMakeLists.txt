@@ -30,6 +30,10 @@ qt_add_qml_module(MotionCaptureApp
     SOURCES
         src/xsenscontroller.h
         src/xsenscontroller.cpp
+        SOURCES src/bodymeasurement.h src/bodymeasurement.cpp
+        SOURCES
+
+
 )
 
 set_target_properties(MotionCaptureApp PROPERTIES
