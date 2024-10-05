@@ -17,7 +17,7 @@ qt_add_resources(MotionCaptureApp "resources"
     PREFIX "/"
     FILES
         qtquickcontrols2.conf
-        resources/fonts/Exo2.ttf
+        resources/icons/router.svg
         resources/icons/settings.svg
         resources/icons/query.svg
 )
@@ -28,12 +28,17 @@ qt_add_qml_module(MotionCaptureApp
     QML_FILES
         qml/Main.qml
     SOURCES
-        src/xsenscontroller.h
-        src/xsenscontroller.cpp
-        SOURCES src/bodymeasurement.h src/bodymeasurement.cpp
-        SOURCES
-
-
+        src/motioncapturesystem.h
+        src/xsens/xsenssystem.h
+        src/xsens/xsenssystem.cpp
+        src/xsens/utils.h
+        src/xsens/utils.cpp
+        src/xsens/license.h
+        src/xsens/license.cpp
+        src/xsens/hardware.h
+        src/xsens/hardware.cpp
+        src/xsens/sensorhub.h
+        src/xsens/sensorhub.cpp
 )
 
 set_target_properties(MotionCaptureApp PROPERTIES
@@ -43,6 +48,7 @@ set_target_properties(MotionCaptureApp PROPERTIES
 target_include_directories(MotionCaptureApp
     PRIVATE
         ${CMAKE_SOURCE_DIR}/src
+        ${CMAKE_SOURCE_DIR}/src/xsens
         ${XSENS_SDK_DIR}/x64/include
 )
 

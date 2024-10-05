@@ -11,13 +11,6 @@ ApplicationWindow {
 
     title: qsTr("Motion Capture")
 
-    font.family: exo2.name
-
-    FontLoader {
-        id: exo2
-        source: "qrc:/resources/fonts/Exo2.ttf"
-    }
-
     header: TabBar {
         id: tabBar
         width: parent.width
@@ -41,66 +34,76 @@ ApplicationWindow {
         currentIndex: tabBar.currentIndex
         anchors.fill: parent
 
-        XsensController {
+        XsensSystem {
             id: xsens
         }
 
-        ColumnLayout {
-            id: setupView
+        Page {
+            id: setupPage
+            Column {
+                spacing: 32
+                width: parent.width
 
-            ColumnLayout {
-                Layout.alignment: Qt.AlignHCenter
-                Text {
-                    text: "Xsens System"
-                    font.weight: 600
-                    font.pixelSize: 24
-                    Layout.alignment: Qt.AlignHCenter
-                }
-                Text {
-                    text: xsens.version + " " + xsens.licenseName + " License"
-                    font.weight: 100
-                    font.pixelSize: 14
-                    Layout.alignment: Qt.AlignHCenter
-                }
-            }
-
-            RowLayout {
-                spacing: 50
-                ColumnLayout {
-
+                Column {
+                    spacing: 4
+                    anchors.horizontalCenter: parent.horizontalCenter
+                    Text {
+                        text: "Xsens System"
+                        font.weight: 600
+                        font.pixelSize: 24
+                        anchors.horizontalCenter: parent.horizontalCenter
+                    }
+                    Text {
+                        text: xsens.version + " | " + xsens.license.type + " License"
+                        font.weight: 200
+                        font.pixelSize: 14
+                        anchors.horizontalCenter: parent.horizontalCenter
+                    }
                 }
 
-                ColumnLayout {
-                    spacing: 5
+                Row {
+                    spacing: 32
+                    anchors.horizontalCenter: parent.horizontalCenter
 
-                    Repeater {
-                        model: xsens.bodyMeasurements
+                    Image {
+                        source: "qrc:/resources/icons/router.svg"
 
-                        RowLayout {
-                            spacing: 10
-                            TextField {
-                                implicitHeight: 30
-                                font.pixelSize: 16
-                                validator: DoubleValidator{
-                                    bottom: 0
-                                }
-                            }
-                            Label {
-                                text: modelData.label
-                                font.pixelSize: 16
-
-                            }
-
+                        Rectangle {
+                            property int size: 16
+                            property int half: size / 2
+                            radius: half
+                            width: size
+                            height: size
+                            anchors.top: parent.top
+                            anchors.left: parent.left
+                            color: xsens.hardware.sensorHub.isConnected ? "green" : "red"
                         }
                     }
+
+                    Column {
+                        anchors.verticalCenter: parent.verticalCenter
+
+                        Text {
+                            text: xsens.hardware.sensorHub.isConnected ? xsens.hardware.sensorHub.modelName : "No Device Found"
+                            font.pixelSize: 16
+                            font.weight: 400
+                        }
+                        Text {
+                            text: xsens.hardware.sensorHub.isConnected ? "Channel " + xsens.hardware.sensorHub.channel + " | " + xsens.hardware.sensorHub.modelId : "Required"
+                            font.pixelSize: 12
+                            font.weight: 200
+                        }
+                    }
+
+
                 }
             }
 
 
         }
 
-        ColumnLayout {
-            id: analyzeView
+        Page {
+            id: analyzePage
         }
     }
 }
