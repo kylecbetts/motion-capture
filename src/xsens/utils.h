@@ -8,6 +8,7 @@ class Utils
 {
 public:
     static QString toQString(const XsString &xsString);
+    static XsString toXsString(const QString &qString);
 };
 
 #endif // UTILS_H

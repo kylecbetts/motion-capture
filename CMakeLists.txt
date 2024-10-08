@@ -17,9 +17,14 @@ qt_add_resources(MotionCaptureApp "resources"
     PREFIX "/"
     FILES
         qtquickcontrols2.conf
+        resources/icons/compass.svg
+        resources/icons/power.svg
         resources/icons/router.svg
+        resources/icons/sensor.svg
         resources/icons/settings.svg
         resources/icons/query.svg
+        resources/images/ybot.png
+        resources/images/ybotReduced.png
 )
 
 qt_add_qml_module(MotionCaptureApp
@@ -27,6 +32,15 @@ qt_add_qml_module(MotionCaptureApp
     VERSION 1.0
     QML_FILES
         qml/Main.qml
+
+        qml/BodyMeasurements.qml
+
+
+        qml/sensors/SensorPowerButton.qml
+        qml/SensorsPage.qml
+        qml/TabPage.qml
+        qml/SensorsModel.qml
+
     SOURCES
         src/motioncapturesystem.h
         src/xsens/xsenssystem.h
@@ -35,10 +49,13 @@ qt_add_qml_module(MotionCaptureApp
         src/xsens/utils.cpp
         src/xsens/license.h
         src/xsens/license.cpp
-        src/xsens/hardware.h
-        src/xsens/hardware.cpp
-        src/xsens/sensorhub.h
-        src/xsens/sensorhub.cpp
+
+
+
+
+        src/xsens/sensors/sensors.h src/xsens/sensors/sensors.cpp
+        src/xsens/sensors/sensorhub.h src/xsens/sensors/sensorhub.cpp
+        SOURCES src/xsens/sensors/sensor.h src/xsens/sensors/sensor.cpp
 )
 
 set_target_properties(MotionCaptureApp PROPERTIES
@@ -49,6 +66,7 @@ target_include_directories(MotionCaptureApp
     PRIVATE
         ${CMAKE_SOURCE_DIR}/src
         ${CMAKE_SOURCE_DIR}/src/xsens
+        ${CMAKE_SOURCE_DIR}/src/xsens/sensors
         ${XSENS_SDK_DIR}/x64/include
 )
 

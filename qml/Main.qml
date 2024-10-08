@@ -5,27 +5,41 @@ import QtQuick.Layouts
 import MotionCapture
 
 ApplicationWindow {
+    id: application
+    title: qsTr("Motion Capture")
+
+    visible: true
     width: 1280
     height: 720
-    visible: true
 
-    title: qsTr("Motion Capture")
+    XsensSystem {
+        id: xsens
+    }
 
     header: TabBar {
         id: tabBar
-        width: parent.width
+        width: application.width
         Material.elevation: 4
 
         TabButton {
-            text: "Setup"
+            id: sensorsTab
+            text: "Sensors"
+            icon.source: "qrc:/resources/icons/sensor.svg"
             display: AbstractButton.TextUnderIcon
-            icon.source: "qrc:/resources/icons/settings.svg"
         }
 
         TabButton {
-            text: "Analyze"
+            id: calibrationTab
+            text: "Calibration"
+            icon.source: "qrc:/resources/icons/compass.svg"
             display: AbstractButton.TextUnderIcon
+        }
+
+        TabButton {
+            id: analyzeTab
+            text: "Analyze"
             icon.source: "qrc:/resources/icons/query.svg"
+            display: AbstractButton.TextUnderIcon
         }
     }
 
@@ -34,76 +48,33 @@ ApplicationWindow {
         currentIndex: tabBar.currentIndex
         anchors.fill: parent
 
-        XsensSystem {
-            id: xsens
+        SensorsPage {
+            xsensSensors: xsens.sensors()
         }
 
         Page {
-            id: setupPage
-            Column {
-                spacing: 32
-                width: parent.width
+            id: calibrationPage
 
-                Column {
-                    spacing: 4
-                    anchors.horizontalCenter: parent.horizontalCenter
-                    Text {
-                        text: "Xsens System"
-                        font.weight: 600
-                        font.pixelSize: 24
-                        anchors.horizontalCenter: parent.horizontalCenter
-                    }
-                    Text {
-                        text: xsens.version + " | " + xsens.license.type + " License"
-                        font.weight: 200
-                        font.pixelSize: 14
-                        anchors.horizontalCenter: parent.horizontalCenter
-                    }
-                }
-
-                Row {
-                    spacing: 32
-                    anchors.horizontalCenter: parent.horizontalCenter
-
-                    Image {
-                        source: "qrc:/resources/icons/router.svg"
-
-                        Rectangle {
-                            property int size: 16
-                            property int half: size / 2
-                            radius: half
-                            width: size
-                            height: size
-                            anchors.top: parent.top
-                            anchors.left: parent.left
-                            color: xsens.hardware.sensorHub.isConnected ? "green" : "red"
-                        }
-                    }
-
-                    Column {
-                        anchors.verticalCenter: parent.verticalCenter
-
-                        Text {
-                            text: xsens.hardware.sensorHub.isConnected ? xsens.hardware.sensorHub.modelName : "No Device Found"
-                            font.pixelSize: 16
-                            font.weight: 400
-                        }
-                        Text {
-                            text: xsens.hardware.sensorHub.isConnected ? "Channel " + xsens.hardware.sensorHub.channel + " | " + xsens.hardware.sensorHub.modelId : "Required"
-                            font.pixelSize: 12
-                            font.weight: 200
-                        }
-                    }
-
-
-                }
+            Text {
+                text: "Calibration"
             }
-
-
         }
 
         Page {
             id: analyzePage
+            Text {
+                text: "Analyze"
+            }
         }
+    }
+
+    footer: Pane {
+        id: footer
+        contentWidth: application.width
+            Text {
+                readonly property var license: xsens.license()
+                text: "Xsens Version " + xsens.version + " (" + license.type + " License)"
+                anchors.horizontalCenter: parent.horizontalCenter
+            }
     }
 }
