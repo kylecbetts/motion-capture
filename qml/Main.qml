@@ -13,7 +13,7 @@ ApplicationWindow {
     height: 720
 
     XsensSystem {
-        id: xsens
+        id: xsensSystem
     }
 
     header: TabBar {
@@ -23,6 +23,7 @@ ApplicationWindow {
 
         TabButton {
             id: sensorsTab
+
             text: "Sensors"
             icon.source: "qrc:/resources/icons/sensor.svg"
             display: AbstractButton.TextUnderIcon
@@ -30,26 +31,33 @@ ApplicationWindow {
 
         TabButton {
             id: calibrationTab
+
             text: "Calibration"
             icon.source: "qrc:/resources/icons/compass.svg"
             display: AbstractButton.TextUnderIcon
+
+            enabled: xsensSystem.sensors.allConnected
         }
 
         TabButton {
             id: analyzeTab
+
             text: "Analyze"
             icon.source: "qrc:/resources/icons/query.svg"
             display: AbstractButton.TextUnderIcon
+
+            enabled: false
         }
     }
 
     SwipeView {
         id: swipeView
+
         currentIndex: tabBar.currentIndex
         anchors.fill: parent
 
         SensorsPage {
-            xsensSensors: xsens.sensors()
+            sensors: xsensSystem.sensors
         }
 
         Page {
@@ -68,13 +76,27 @@ ApplicationWindow {
         }
     }
 
-    footer: Pane {
+    footer: Rectangle {
         id: footer
-        contentWidth: application.width
-            Text {
-                readonly property var license: xsens.license()
-                text: "Xsens Version " + xsens.version + " (" + license.type + " License)"
-                anchors.horizontalCenter: parent.horizontalCenter
-            }
+
+        width: application.width
+        height: 48
+
+        Rectangle {
+            height: 2
+            color: "lightgray"
+
+            anchors.top: footer.top
+            anchors.left: footer.left
+            anchors.right: footer.right
+        }
+
+        Text {
+            text: xsensSystem.licenseName + " License  |  SDK v" + xsensSystem.sdkVersion
+            color: "gray"
+            font.weight: 300
+
+            anchors.centerIn: footer
+        }
     }
 }

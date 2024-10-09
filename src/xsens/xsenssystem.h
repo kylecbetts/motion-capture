@@ -4,33 +4,39 @@
 #include <QObject>
 #include <QQmlEngine>
 #include "xme/xmecontrol.h"
-#include "motioncapturesystem.h"
-#include "license.h"
+#include "xme/xmelicense.h"
+
 #include "sensors.h"
 
-class XsensSystem : public QObject, public MotionCaptureSystem
+class XsensSystem : public QObject
 {
     Q_OBJECT
     QML_ELEMENT
-    Q_PROPERTY(QString version READ version CONSTANT)
+
+    Q_PROPERTY(QString sdkVersion READ sdkVersion CONSTANT)
+    Q_PROPERTY(QString licenseName READ licenseName CONSTANT)
+    Q_PROPERTY(Sensors * sensors READ sensors CONSTANT)
 
 public:
     explicit XsensSystem(QObject *parent = nullptr);
 
-    QString version() const;
+    QString sdkVersion() const;
+    QString licenseName() const;
 
-public slots:
-    License *license();
-    Sensors *sensors();
+    Sensors *sensors() const;
 
 private:
     void initializeLicense();
-    void initializeVersion();
+    void initializeControl();
+    void initializeSdkVersion();
+    void initializeComponents();
 
-    License *m_license;
+    QString m_sdkVersion;
+    QString m_licenseName;
+    Sensors *m_sensors = nullptr;
+
+    XmeLicense *m_license;
     XmeControl *m_control;
-    QString m_version;
-    Sensors *m_sensors;
 };
 
 #endif // XSENSSYSTEM_H

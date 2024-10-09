@@ -21,10 +21,13 @@ qt_add_resources(MotionCaptureApp "resources"
         resources/icons/power.svg
         resources/icons/router.svg
         resources/icons/sensor.svg
-        resources/icons/settings.svg
+        resources/icons/signal0.svg
+        resources/icons/signal1.svg
+        resources/icons/signal2.svg
+        resources/icons/signal3.svg
+        resources/icons/signal4.svg
         resources/icons/query.svg
-        resources/images/ybot.png
-        resources/images/ybotReduced.png
+        resources/images/yBot.png
 )
 
 qt_add_qml_module(MotionCaptureApp
@@ -32,30 +35,19 @@ qt_add_qml_module(MotionCaptureApp
     VERSION 1.0
     QML_FILES
         qml/Main.qml
-
-        qml/BodyMeasurements.qml
-
-
-        qml/sensors/SensorPowerButton.qml
         qml/SensorsPage.qml
-        qml/TabPage.qml
-        qml/SensorsModel.qml
-
+        qml/SensorCoordinates.qml
     SOURCES
-        src/motioncapturesystem.h
         src/xsens/xsenssystem.h
         src/xsens/xsenssystem.cpp
         src/xsens/utils.h
         src/xsens/utils.cpp
-        src/xsens/license.h
-        src/xsens/license.cpp
-
-
-
-
-        src/xsens/sensors/sensors.h src/xsens/sensors/sensors.cpp
-        src/xsens/sensors/sensorhub.h src/xsens/sensors/sensorhub.cpp
-        SOURCES src/xsens/sensors/sensor.h src/xsens/sensors/sensor.cpp
+        src/xsens/sensors/sensors.h
+        src/xsens/sensors/sensors.cpp
+        src/xsens/sensors/sensorhub.h
+        src/xsens/sensors/sensorhub.cpp
+        src/xsens/sensors/sensor.h
+        src/xsens/sensors/sensor.cpp
 )
 
 set_target_properties(MotionCaptureApp PROPERTIES

@@ -5,36 +5,58 @@ XsensSystem::XsensSystem(QObject *parent)
     : QObject{parent}
 {
     initializeLicense();
-    m_control = XmeControl::construct();
-    initializeVersion();
-    m_sensors = new Sensors(m_control);
+    initializeControl();
+    initializeSdkVersion();
+    initializeComponents();
 }
 
-QString XsensSystem::version() const
+QString XsensSystem::sdkVersion() const
 {
-    return m_version;
+    return m_sdkVersion;
 }
 
-License *XsensSystem::license()
+QString XsensSystem::licenseName() const
 {
-    return m_license;
+    return m_licenseName;
 }
 
-Sensors *XsensSystem::sensors()
+Sensors *XsensSystem::sensors() const
 {
     return m_sensors;
 }
 
 void XsensSystem::initializeLicense()
 {
-    m_license = new License();
-    if (!m_license->isAvailable()) {
+    m_license = new XmeLicense();
+    if (!XmeLicense::isConstructed()) {
+        throw std::runtime_error("Fatal Error: Xsens license not initialized.");
+    }
+    if (!XmeLicense::isLicenseAvailable()) {
         throw std::runtime_error("Fatal Error: Xsens license cannot be used.");
     }
+    m_licenseName = Utils::toQString(XmeLicense::getCurrentLicense());
 }
 
-void XsensSystem::initializeVersion()
+void XsensSystem::initializeControl()
 {
-    XsString xsVersion = m_control->version().toSimpleString();
-    m_version = Utils::toQString(xsVersion);
+    if (!m_license) {
+        throw std::runtime_error("Fatal Error: Xsens license not initialized.");
+    }
+    m_control = XmeControl::construct();
+}
+
+void XsensSystem::initializeSdkVersion()
+{
+    if (!m_control) {
+        throw std::runtime_error("Fatal Error: Xsens control not initialized.");
+    }
+    m_sdkVersion = Utils::toQString(m_control->version().toSimpleString());
+}
+
+void XsensSystem::initializeComponents()
+{
+    if (!m_control) {
+        throw std::runtime_error("Fatal Error: Xsens control not initialized.");
+    }
+    m_sensors = new Sensors(m_control);
 }
